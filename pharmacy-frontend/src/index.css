@@ -1,0 +1,60 @@
+@import "tailwindcss";
+html,
+body,
+#root {
+  height: 100%;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --border: 214.3 31.8% 91.4%;
+
+  /* Brand palette (light) */
+  --brand: 230 48% 32%;
+  --brand-soft: 210 90% 96%;
+  --brand-strong: 215 85% 60%;
+
+  /* UI utility colors */
+  --overlay: 222.2 84% 4.9%; /* dark overlay in light mode */
+  --muted: 222.2 20% 45%; /* muted text / subtle bg */
+
+  /* Dark surfaces */
+  --surface: 0 0% 100%;
+  --surface-2: 210 90% 96%;
+}
+
+.dark {
+  --background: 222 47% 6%;
+  --foreground: 210 40% 98%;
+  --border: 222 20% 18%;
+
+  /* IMPORTANT: use dark surfaces, not light ones */
+  --surface: 222 30% 10%;
+  --surface-2: 222 22% 14%;
+  /* 👇 THIS IS THE KEY */
+  --overlay: 222 30% 6%; /* deep dark overlay */
+  --muted: 210 15% 55%; /* muted light text */
+}
+
+.bg-background {
+  background-color: hsl(var(--background));
+}
+
+.text-foreground {
+  color: hsl(var(--foreground));
+}
+
+.bg-border {
+  background-color: hsl(var(--border));
+}
+
+.text-muted-foreground {
+  color: hsl(215.4 16.3% 46.9%);
+}
+
+.bg-muted {
+  background-color: hsl(210 40% 96.1%);
+}
