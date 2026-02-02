@@ -1,86 +1,280 @@
 # Pharmio – Pharmacy Management System 💊
 
-A modern **Pharmacy Management System** built as a **student project** at **Jamhuriya University**, designed to manage medicines, suppliers, sales (POS), users, and reports using a clean and practical workflow.
-
-This project was developed after learning **Node.js** and the **MERN stack**, while using **MySQL** as the database.
+A modern **Pharmacy Management System** built as a university project after learning **Node.js** and the **MERN stack**, using **MySQL**, **Express.js**, **React**, and **Node.js**.
+This system is designed to handle real pharmacy workflows such as medicine management, sales (POS), reporting, and user settings.
 
 ---
 
 ## 📌 Project Overview
 
-**Pharmio** helps pharmacies manage daily operations such as:
-- Medicine inventory
-- Sales / POS
-- User roles (Admin, Pharmacist, Cashier)
-- Reports and exports
-- System preferences (theme & UI settings)
+**Pharmio** is a full‑stack web application that helps pharmacies manage their daily operations efficiently. The system focuses on clarity, speed, and clean data handling while remaining simple enough for learning and demonstration purposes.
 
-The system focuses on **clarity, speed, and real-world pharmacy workflows**.
+This project was developed by **students of Jamhuriya University** as part of practical learning in backend and frontend web development.
+
+---
+
+## ✨ Features
+
+* 🔐 Authentication & Authorization (Admin / Staff)
+* 💊 Medicines Management (CRUD + stock tracking)
+* 🏪 Sales / POS module
+* 📊 Reports & Analytics
+* 📁 Export reports as **PDF, CSV, XLSX**
+* 🎨 User Settings (Theme & Brand Palette per user)
+* 🧾 Invoice generation (Printable)
+* 🛡️ Secure API with protected routes
+
+> ❌ WhatsApp receipt sharing and online payments are **not included** in this project.
 
 ---
 
 ## 🧰 Tech Stack
 
-### Backend
-- **Node.js**
-- **Express.js**
-- **MySQL**
-- **JWT Authentication**
-- **bcrypt.js** (password hashing)
-
 ### Frontend
-- **React.js**
-- **React Router**
-- **Tailwind CSS**
-- **Lucide Icons**
 
-### Tools & Formats
-- **CSV / XLSX / PDF exports**
-- RESTful API design
+* React
+* React Router
+* Tailwind CSS
+* Lucide Icons
+* Axios
 
----
+### Backend
 
-## 👥 User Roles
+* Node.js
+* Express.js
+* MySQL
+* JWT Authentication
 
-| Role        | Permissions |
-|-------------|------------|
-| **Admin**       | Full access, manage users, reports |
-| **Pharmacist**  | Manage medicines, sales |
-| **Cashier**     | Sales / POS only |
+### Tools
 
----
-
-## 📦 Core Features
-
-- 🔐 Secure authentication (JWT)
-- 👤 User management (Admin only)
-- 💊 Medicine inventory (CRUD)
-- 🏷 Supplier management
-- 🧾 Sales / POS system
-- 📊 Reports & analytics
-- 🎨 User preferences (theme & palette)
-- 📁 Export reports as **PDF, CSV, XLSX**
-
-> ❌ WhatsApp receipt sending is **not included**
+* phpMyAdmin (Database management)
+* Postman (API testing)
+* Git & GitHub
 
 ---
 
-## 🗂 Database Structure (MySQL)
+## 🗂️ Project Structure
 
-Main tables used:
-- `users`
-- `medicines`
-- `suppliers`
-- `sales`
-- `sale_items`
-
-Foreign key relationships are enforced for data integrity.
+```
+pharmio/
+├── backend/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── routes/
+│   │   ├── middlewares/
+│   │   ├── config/
+│   │   └── server.js
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   ├── api/
+│   │   └── App.jsx
+│   └── package.json
+│
+└── README.md
+```
 
 ---
 
-## 🚀 Getting Started
+## 🗄️ Database Design (MySQL)
 
-### 1️⃣ Clone the repository
+Key tables used in the system:
+
+* `users`
+* `medicines`
+* `suppliers`
+* `sales`
+* `sale_items`
+
+### Example: `medicines` Table
+
+```sql
+CREATE TABLE medicines (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  brand_name VARCHAR(150) NOT NULL,
+  generic_name VARCHAR(150),
+  form ENUM('Tablet','Capsule','Syrup','Injection','Drops','Cream','Other') NOT NULL,
+  strength VARCHAR(50) NOT NULL,
+  category ENUM('Pain Relief','Antibiotics','Allergy','Gastro','Diabetes','Cardio','Vitamins','Other') NOT NULL,
+  supplier_id INT,
+  quantity INT DEFAULT 0,
+  buy_price DECIMAL(10,2) DEFAULT 0.00,
+  sell_price DECIMAL(10,2) DEFAULT 0.00,
+  expiry_date DATE NOT NULL,
+  is_active TINYINT(1) DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
+);
+```
+
+---
+
+## 🔑 Authentication Flow
+
+* User logs in using email and password
+* Backend validates credentials
+* JWT token is generated
+* Token is stored on the client (localStorage)
+* Protected routes require a valid token
+
+---
+
+## 📡 API Documentation
+
+Base URL:
+
+```
+/api
+```
+
+### 🔐 Auth Routes
+
+#### Login
+
+```
+POST /api/auth/login
+```
+
+**Body:**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+```
+
+#### Register (Admin only)
+
+```
+POST /api/auth/register
+```
+
+---
+
+### 👤 User Routes
+
+#### Get Current User
+
+```
+GET /api/users/me
+```
+
+#### Update Profile
+
+```
+PATCH /api/users/me/profile
+```
+
+#### Update Preferences
+
+```
+PATCH /api/users/me/preferences
+```
+
+---
+
+### 💊 Medicines Routes
+
+#### Get All Medicines
+
+```
+GET /api/medicines
+```
+
+#### Create Medicine
+
+```
+POST /api/medicines
+```
+
+#### Update Medicine
+
+```
+PUT /api/medicines/:id
+```
+
+#### Deactivate Medicine
+
+```
+PATCH /api/medicines/:id/active
+```
+
+---
+
+### 🏪 Sales Routes
+
+#### Create Sale
+
+```
+POST /api/sales
+```
+
+#### Get Sales Report
+
+```
+GET /api/reports/sales
+```
+
+---
+
+## ▶️ Getting Started
+
+### 1️⃣ Clone Repository
+
 ```bash
 git clone https://github.com/your-username/pharmio.git
-cd pharmio
+```
+
+### 2️⃣ Backend Setup
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+### 3️⃣ Frontend Setup
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### 4️⃣ Database
+
+* Import SQL file into MySQL using phpMyAdmin
+* Update database credentials in backend config
+
+---
+
+## 👨‍🎓 About the Team
+
+This project was developed by **Jamhuriya University students** as part of hands‑on learning in:
+
+* Node.js
+* Express.js
+* React
+* MySQL
+* Full‑stack application design
+
+---
+
+## 📄 License
+
+This project is for **educational purposes only**.
+
+---
+
+## 📬 Contact
+
+📧 Email: `admin@pharmacy.local`
+
+---
+
+⭐ If you find this project helpful, consider starring the repository!
